@@ -1,4 +1,20 @@
-const Database = require('better-sqlite3');
+const path = require('path');
+const fs = require('fs');
+
+const dbPath = path.join(__dirname, '..', 'db.json');
+
+function getDb() {
+  if (!fs.existsSync(dbPath)) {
+    fs.writeFileSync(dbPath, JSON.stringify({ users: [], tasks: [], earnings: [] }));
+  }
+  return JSON.parse(fs.readFileSync(dbPath));
+}
+
+function saveDb(data) {
+  fs.writeFileSync(dbPath, JSON.stringify(data, null, 2));
+}
+
+module.exports = { getDb, saveDb };const Database = require('better-sqlite3');
 const path = require('path');
 
 const db = new Database(path.join(__dirname, '..', 'earn.db'));
